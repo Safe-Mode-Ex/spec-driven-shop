@@ -18,6 +18,14 @@ export function OrderForm({ cartItems, totalPrice, onSubmit }) {
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
 
+  /**
+   * Проверяет форму доставки и способ оплаты.
+   * Каждое поле проверяется по правилам из `docs/checkout-validation-spec.md`:
+   * имя (непустое, от 2 символов), телефон (10-15 цифр, опциональный +),
+   * email (базовый формат), адрес (от 5 символов), способ оплаты.
+   * @param {{ name: string, phone: string, email: string, address: string, payment: { method: string } }} data - состояние формы
+   * @returns {{ name?: string, phone?: string, email?: string, address?: string, payment?: string }} ошибки по полям: ключ - поле, значение - сообщение; пустой объект, если форма валидна
+   */
   const validate = (data) => {
     const next = {};
     if (!data.name.trim()) next.name = 'Введите имя';
