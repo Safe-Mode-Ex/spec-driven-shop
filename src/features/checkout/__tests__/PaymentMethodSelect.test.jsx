@@ -1,0 +1,76 @@
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { PaymentMethodSelect, PAYMENT_METHODS } from '../PaymentMethodSelect.jsx';
+
+describe('PaymentMethodSelect', () => {
+  it('рендерит fieldset с legend', () => {
+    const { container } = render(
+      <PaymentMethodSelect value="" onChange={vi.fn()} />,
+    );
+    expect(container.querySelector('fieldset')).toBeTruthy();
+    expect(screen.getByText('Способ оплаты')).toBeTruthy();
+  });
+
+  it('рендерит три радиокнопки', () => {
+    render(<PaymentMethodSelect value="" onChange={vi.fn()} />);
+    const radios = screen.getAllByRole('radio');
+    expect(radios).toHaveLength(3);
+  });
+
+  it('ни один radio не выбран по умолчанию (value="")', () => {
+    render(<PaymentMethodSelect value="" onChange={vi.fn()} />);
+    const radios = screen.getAllByRole('radio');
+    radios.forEach((radio) => {
+      expect(radio.checked).toBe(false);
+      expect(radio.getAttribute('aria-checked')).toBe('false');
+    });
+  });
+
+  it('подсвечивает выбранный radio при заданном value', () => {
+    render(<PaymentMethodSelect value="card" onChange={vi.fn()} />);
+    const radios = screen.getAllByRole('radio');
+    expect(radios[0].checked).toBe(true);
+    expect(radios[0].getAttribute('aria-checked')).toBe('true');
+    expect(radios[1].checked).toBe(false);
+    expect(radios[2].checked).toBe(false);
+  });
+
+  it('вызывает onChange с кодом метода при выборе', () => {
+    const onChange = vi.fn();
+    render(<PaymentMethodSelect value="" onChange={onChange} />);
+    const radios = screen.getAllByRole('radio');
+    fireEvent.click(radios[1]);
+    expect(onChange).toHaveBeenCalledWith('cod');
+  });
+
+  it('показывает ошибку если touched и есть error', () => {
+    render(
+      <PaymentMethodSelect
+        value=""
+        onChange={vi.fn()}
+        error="Выберите способ оплаты"
+        touched
+      />,
+    );
+    const alert = screen.getByRole('alert');
+    expect(alert.textContent).toBe('Выберите способ оплаты');
+  });
+
+  it('не показывает ошибку если не touched', () => {
+    render(
+      <PaymentMethodSelect
+        value=""
+        onChange={vi.fn()}
+        error="Выберите способ оплаты"
+      />,
+    );
+    expect(screen.queryByRole('alert')).toBeNull();
+  });
+
+  it('рендерит методы в маппинге PAYMENT_METHODS с названиями', () => {
+    render(<PaymentMethodSelect value="" onChange={vi.fn()} />);
+    PAYMENT_METHODS.forEach((method) => {
+      expect(screen.getByText(method.label)).toBeTruthy();
+    });
+  });
+});
