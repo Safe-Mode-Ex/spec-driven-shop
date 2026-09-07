@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { PaymentMethodSelect, PAYMENT_METHODS } from './PaymentMethodSelect';
 import styles from './OrderForm.module.css';
 
 const PHONE_REGEX = /^\+?[0-9]{10,15}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PAYMENT_METHOD_VALUES = PAYMENT_METHODS.map((method) => method.value);
 
 export function OrderForm({ cartItems, totalPrice, onSubmit }) {
   const [formData, setFormData] = useState({
@@ -10,6 +12,7 @@ export function OrderForm({ cartItems, totalPrice, onSubmit }) {
     phone: '',
     email: '',
     address: '',
+    payment: { method: '' },
   });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
@@ -29,6 +32,10 @@ export function OrderForm({ cartItems, totalPrice, onSubmit }) {
     if (!data.address.trim()) next.address = 'Введите адрес доставки';
     else if (data.address.trim().length < 5) next.address = 'Адрес слишком короткий';
 
+    if (!PAYMENT_METHOD_VALUES.includes(data.payment?.method)) {
+      next.payment = 'Выберите способ оплаты';
+    }
+
     return next;
   };
 
@@ -39,6 +46,13 @@ export function OrderForm({ cartItems, totalPrice, onSubmit }) {
     if (touched[name]) {
       setErrors(validate(nextData));
     }
+  };
+
+  const handlePaymentChange = (method) => {
+    const nextData = { ...formData, payment: { method } };
+    setFormData(nextData);
+    setTouched((prev) => ({ ...prev, payment: true }));
+    setErrors(validate(nextData));
   };
 
   const handleBlur = (e) => {
@@ -151,6 +165,13 @@ export function OrderForm({ cartItems, totalPrice, onSubmit }) {
           </span>
         )}
       </div>
+
+      <PaymentMethodSelect
+        value={formData.payment.method}
+        onChange={handlePaymentChange}
+        error={errors.payment}
+        touched={touched.payment}
+      />
 
       <button
         type="submit"

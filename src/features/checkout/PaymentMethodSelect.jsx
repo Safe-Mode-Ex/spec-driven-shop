@@ -10,7 +10,11 @@ export function PaymentMethodSelect({ value = '', onChange, error, touched }) {
   const showError = touched && Boolean(error);
 
   return (
-    <fieldset className={styles.group}>
+    <fieldset
+      className={styles.group}
+      aria-invalid={showError ? true : undefined}
+      aria-describedby={showError ? 'payment-error' : undefined}
+    >
       <legend className={styles.legend}>Способ оплаты</legend>
       {PAYMENT_METHODS.map((method) => (
         <label key={method.value} className={styles.option}>

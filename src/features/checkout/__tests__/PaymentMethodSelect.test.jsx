@@ -67,6 +67,30 @@ describe('PaymentMethodSelect', () => {
     expect(screen.queryByRole('alert')).toBeNull();
   });
 
+  it('ставит aria-invalid и aria-describedby на fieldset при ошибке', () => {
+    const { container } = render(
+      <PaymentMethodSelect
+        value=""
+        onChange={vi.fn()}
+        error="Выберите способ оплаты"
+        touched
+      />,
+    );
+    const fieldset = container.querySelector('fieldset');
+    expect(fieldset.getAttribute('aria-invalid')).toBe('true');
+    expect(fieldset.getAttribute('aria-describedby')).toBe('payment-error');
+    expect(container.querySelector('#payment-error')).toBeTruthy();
+  });
+
+  it('не ставит aria-invalid на fieldset без ошибки', () => {
+    const { container } = render(
+      <PaymentMethodSelect value="" onChange={vi.fn()} />,
+    );
+    const fieldset = container.querySelector('fieldset');
+    expect(fieldset.getAttribute('aria-invalid')).toBeNull();
+    expect(fieldset.getAttribute('aria-describedby')).toBeNull();
+  });
+
   it('рендерит методы в маппинге PAYMENT_METHODS с названиями', () => {
     render(<PaymentMethodSelect value="" onChange={vi.fn()} />);
     PAYMENT_METHODS.forEach((method) => {
