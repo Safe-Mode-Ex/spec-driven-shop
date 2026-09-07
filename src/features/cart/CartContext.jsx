@@ -62,6 +62,11 @@ export function CartProvider({ children }) {
     setPromo(null);
   }
 
+  function clearCart() {
+    setItems([]);
+    setPromo(null);
+  }
+
   function getTotal() {
     return calculateTotal(items, promo?.discount);
   }
@@ -75,6 +80,7 @@ export function CartProvider({ children }) {
         removeFromCart,
         applyPromo,
         removePromo,
+        clearCart,
         getSubtotal: () => getSubtotal(items),
         getDelivery: () => getDeliveryPrice(applyDiscount(getSubtotal(items), promo?.discount)),
         getTotal,
