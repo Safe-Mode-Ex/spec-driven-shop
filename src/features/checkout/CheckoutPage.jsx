@@ -1,25 +1,31 @@
 import { useState } from 'react';
 import { useCart } from '../cart/CartContext';
 import { OrderForm } from './OrderForm';
+import { OrderConfirmation } from './OrderConfirmation';
+import { buildOrderSnapshot } from '../../utils/order';
 import styles from './CheckoutPage.module.css';
 
 function CheckoutPage() {
-  const { items, getTotal } = useCart();
-  const [orderPlaced, setOrderPlaced] = useState(false);
+  const { items, getTotal, clearCart } = useCart();
+  const [orderSnapshot, setOrderSnapshot] = useState(null);
 
   const handleOrderSubmit = (orderData) => {
-    // В реальном проекте здесь будет отправка на сервер
-    console.log('Order submitted:', orderData);
-    setOrderPlaced(true);
+    const contact = {
+      name: orderData.name,
+      phone: orderData.phone,
+      email: orderData.email,
+      address: orderData.address,
+    };
+    const payment = orderData.payment;
+    const total = getTotal();
+    const { orderItems } = buildOrderSnapshot(items, contact, payment, total);
+    const snapshot = { contact, payment, orderItems, total };
+    setOrderSnapshot(snapshot);
+    clearCart();
   };
 
-  if (orderPlaced) {
-    return (
-      <div className={styles.success}>
-        <h2>Заказ оформлен</h2>
-        <p>Спасибо за покупку! Мы свяжемся с вами для подтверждения.</p>
-      </div>
-    );
+  if (orderSnapshot) {
+    return <OrderConfirmation orderSnapshot={orderSnapshot} />;
   }
 
   if (items.length === 0) {

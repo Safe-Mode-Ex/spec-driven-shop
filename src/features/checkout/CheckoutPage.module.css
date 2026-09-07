@@ -2,12 +2,7 @@
   padding: 24px;
 }
 
-.success,
 .empty {
   padding: 48px 24px;
   text-align: center;
-}
-
-.success h2 {
-  color: var(--color-success, #16a34a);
 }
