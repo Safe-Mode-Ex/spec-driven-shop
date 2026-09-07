@@ -1,10 +1,5 @@
+import { PAYMENT_METHODS } from './payment-methods';
 import styles from './PaymentMethodSelect.module.css';
-
-export const PAYMENT_METHODS = [
-  { value: 'card', label: 'Картой при оформлении' },
-  { value: 'cod', label: 'Наличными при получении' },
-  { value: 'online', label: 'Онлайн-перевод' },
-];
 
 export function PaymentMethodSelect({ value = '', onChange, error, touched }) {
   const showError = touched && Boolean(error);
@@ -24,7 +19,6 @@ export function PaymentMethodSelect({ value = '', onChange, error, touched }) {
             value={method.value}
             checked={value === method.value}
             onChange={() => onChange(method.value)}
-            aria-checked={value === method.value}
             className={styles.radio}
           />
           <span>{method.label}</span>

@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { PaymentMethodSelect, PAYMENT_METHODS } from '../PaymentMethodSelect.jsx';
+import { PaymentMethodSelect } from '../PaymentMethodSelect.jsx';
+import { PAYMENT_METHODS } from '../payment-methods';
 
 describe('PaymentMethodSelect', () => {
   it('рендерит fieldset с legend', () => {
@@ -22,7 +23,6 @@ describe('PaymentMethodSelect', () => {
     const radios = screen.getAllByRole('radio');
     radios.forEach((radio) => {
       expect(radio.checked).toBe(false);
-      expect(radio.getAttribute('aria-checked')).toBe('false');
     });
   });
 
@@ -30,7 +30,6 @@ describe('PaymentMethodSelect', () => {
     render(<PaymentMethodSelect value="card" onChange={vi.fn()} />);
     const radios = screen.getAllByRole('radio');
     expect(radios[0].checked).toBe(true);
-    expect(radios[0].getAttribute('aria-checked')).toBe('true');
     expect(radios[1].checked).toBe(false);
     expect(radios[2].checked).toBe(false);
   });

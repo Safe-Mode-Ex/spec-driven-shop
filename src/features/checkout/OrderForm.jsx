@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { PaymentMethodSelect, PAYMENT_METHODS } from './PaymentMethodSelect';
+import { PaymentMethodSelect } from './PaymentMethodSelect';
+import { PAYMENT_METHODS } from './payment-methods';
 import styles from './OrderForm.module.css';
 
 const PHONE_REGEX = /^\+?[0-9]{10,15}$/;

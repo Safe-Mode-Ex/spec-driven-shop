@@ -38,7 +38,8 @@
 
 - `src/features/checkout/PaymentMethodSelect.jsx` — группировка радиокнопок для выбора способа оплаты. Обязательный выбор, ни один вариант не выбран по умолчанию.
 - `src/features/checkout/OrderConfirmation.jsx` — экран подтверждения: состав корзины, итоговая сумма, способ оплаты, контактные данные.
-- `src/utils/order.js` — чистая функция снапшота заказа `buildOrderSnapshot(cartItems, contact, payment)`.
+- `src/features/checkout/payment-methods.js` — чистый модуль-перечисление способов оплаты (`PAYMENT_METHODS`), единственный источник допустимых значений.
+- `src/utils/order.js` — чистая функция снапшота заказа `buildOrderSnapshot(cartItems, payment, total)`.
 
 ### Способ оплаты
 
@@ -74,7 +75,7 @@
 }
 ```
 
-`buildOrderSnapshot(cartItems, contact, payment)` возвращает `{ orderItems, total }` без контактов и оплаты (те передаются из `OrderForm`). `orderItems` — копии, не ссылки: чтобы состав не менялся, если корзину потом отредактируют.
+`buildOrderSnapshot(cartItems, payment, total)` возвращает `{ orderItems, total }` без контактов и оплаты (те собираются в снапшот в `CheckoutPage`). `total` передаётся готовым значением из `useCart.getTotal()` и не пересчитывается внутри функции. `orderItems` — копии, не ссылки: чтобы состав не менялся, если корзину потом отредактируют. `payment` используется для валидации `payment.method` (одно из `card | cod | online`).
 
 ### Валидация (как в `docs/checkout-validation-spec.md`)
 

@@ -18,7 +18,7 @@ function CheckoutPage() {
     };
     const payment = orderData.payment;
     const total = getTotal();
-    const { orderItems } = buildOrderSnapshot(items, contact, payment, total);
+    const { orderItems } = buildOrderSnapshot(items, payment, total);
     const snapshot = { contact, payment, orderItems, total };
     setOrderSnapshot(snapshot);
     clearCart();

@@ -1,9 +1,11 @@
-const VALID_PAYMENT_METHODS = ['card', 'cod', 'online'];
+import { PAYMENT_METHODS } from '../features/checkout/payment-methods';
 
-export function buildOrderSnapshot(cartItems, contact, payment, total) {
-  if (!payment || !VALID_PAYMENT_METHODS.includes(payment.method)) {
+const PAYMENT_METHOD_VALUES = PAYMENT_METHODS.map((method) => method.value);
+
+export function buildOrderSnapshot(cartItems, payment, total) {
+  if (!payment || !PAYMENT_METHOD_VALUES.includes(payment.method)) {
     throw new Error(
-      `Invalid payment method: must be one of ${VALID_PAYMENT_METHODS.join(', ')}`,
+      `Invalid payment method: must be one of ${PAYMENT_METHOD_VALUES.join(', ')}`,
     );
   }
 

@@ -1,4 +1,4 @@
-import { PAYMENT_METHODS } from './PaymentMethodSelect';
+import { PAYMENT_METHODS } from './payment-methods';
 import styles from './OrderConfirmation.module.css';
 
 export function OrderConfirmation({ orderSnapshot }) {
